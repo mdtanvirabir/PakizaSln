@@ -1,0 +1,70 @@
+﻿@model Order
+
+@{
+    ViewBag.Title = "Create Order";
+}
+
+<h2>Create Order</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label for="CustomerId">Customer</label>
+        <select asp-for="CustomerId" asp-items="ViewBag.Customers"></select>
+    </div>
+    <div>
+        <h3>Products</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody id="productsTable">
+                @for (int i = 0; i < Model.Products.Count; i++)
+                {
+                    <tr>
+                        <td><input asp-for="Products[i].ProductName" /></td>
+                        <td><input asp-for="Products[i].Quantity" /></td>
+                        <td><input asp-for="Products[i].UnitPrice" /></td>
+                        <td>@Model.Products[i].TotalPrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" onclick="addProductRow()">Add Product</button>
+    </div>
+    <button type="submit">Save</button>
+</form>
+
+@section Scripts {
+    <script>
+        function addProductRow() {
+            var table = document.getElementById("productsTable");
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            var cell1 = row.insertCell(0);
+            var element1 = document.createElement("input");
+            element1.name = "Products[" + rowCount + "].ProductName";
+            cell1.appendChild(element1);
+
+            var cell2 = row.insertCell(1);
+            var element2 = document.createElement("input");
+            element2.type = "number";
+            element2.name = "Products[" + rowCount + "].Quantity";
+            cell2.appendChild(element2);
+
+            var cell3 = row.insertCell(2);
+            var element3 = document.createElement("input");
+            element3.type = "number";
+            element3.name = "Products[" + rowCount + "].UnitPrice";
+            cell3.appendChild(element3);
+
+            var cell4 = row.insertCell(3);
+            cell4.innerHTML = "0";
+        }
+    </script>
+}
